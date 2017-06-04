@@ -1,0 +1,133 @@
+作业:
+1:查看工资高于2000的员工
+select ename,sal from emp_lch where sal>2000;
+2:查看不是"CLERK"职位的员工
+  select ename,job from emp_lch where job <> 'CLERK';
+3:查看工资在1000-2500之间的员工
+  select ename,sal from emp_lch where sal between 1000 and 2500;
+4:查看名字是以K结尾的员工
+  select ename from emp_lch where ename like '%K';
+5:查看20,30号部门的员工
+  select ename,deptno from  emp_lch where deptno in (20,30);
+6:查看奖金为NULL的员工
+  select ename,comm from  emp_lch where comm is null;
+7:查看年薪高于20000的员工
+  select ename,sal*12 year_sal from emp_lch where sal*12>20000;
+8:查看公司共有多少种职位
+  select count(distinct job) from emp_lch;
+9:按部门号从小到大排列查看员工
+  select ename,deptno from emp_lch order by deptno ;
+10:查看每个部门的最高，最低，平均工资，和工资总和
+  select max(sal),min(sal),avg(sal),sum(sal),deptno from emp_lch group by deptno;
+11:查看平均工资高于2000的部门的最低薪水
+  select min(sal),deptno from emp_lch group by deptno having avg(sal)>2000;
+12:查看在NEWYORK工作的员工
+   select e.ename,d.loc,e.deptno from emp_lch e,dept_lch d where e.deptno = d.deptno and d.loc = 'NEW YORK';
+13:查看所有员工及所在部门信息，若该员工没有部门，则部门信息以NULL显示
+   select * from emp_lch e left outer join dept_lch d on e.deptno = d.deptno ;
+   insert into emp_lch(ename,sal) values('zhangsan',10000);
+   
+14:查看ALLEN的上司是谁
+   select e1.ename,e2.ename from emp_lch e1,emp_lch e2 where e1.mgr = e2.empno;
+
+*************************************
+15.查询比本部门最高工资低的员工
+SELECT a.ename, a.sal, a.deptno, b.maxsal    
+FROM emp_lch  a,
+(SELECT deptno, max(sal) maxsal
+FROM emp_lch
+GROUP BY deptno)  b
+WHERE a.deptno = b.deptno
+AND a. sal < b.maxsal;
+*************************************
+
+16.找出EMP 中那些工资高于他们所在部门普通员工平均工资的员工。
+select a.* 
+from emp a,(select deptno,avg(sal) sal from emp group by deptno) b
+where a.deptno = b.deptno
+and a.sal>b.sal
+
+注意，select * from emp_lch where sal>(select avg(sal) from emp_lch group by deptno); 
+这种写法是错误的，原因是，(select avg(sal) from emp_lch group by deptno)查出来的是多条数据，
+而where sal>只能是一个固定的值，因此，报错。
+
+17.有职员表emp，若需列出所有薪水高于平均薪水值的员工信息，则有 SQL语句如下：
+SELECT ename, job FROM emp WHERE sal > avg(sal);
+上述语句是否正确？如果有错，写出正确的SQL语句。
+错，where语句中不能使用聚合函数。但是，即使将where改成having，还是报错，原因，
+having一般都是和group by一起用。而这类不需要分组。
+因此，还是使用where语句，修改如下：
+SELECT last_name, first_name FROM employee WHERE salary > (SELECT avg(salary) FROM emp);
+
+18.*******************************（有点难度）换位思考！
+create table stuscore(
+name char(20),
+kecheng char(20),
+fenshu number(6)
+);
+
+insert into stuscore values('张三','语文',81);
+insert into stuscore values('张三','数学',81);
+insert into stuscore values('李四','语文',81);
+insert into stuscore values('李四','数学',80);
+insert into stuscore values('王五','语文',81);
+insert into stuscore values('王五','数学',81);
+insert into stuscore values('王五','英语',80);
+编写一条SQL 语句，查询出每门课都大于80 分的学生姓名。
+select * from stuscore 
+where name not in 
+(select distinct name from stuscore 
+where fenshu < 80) ;
+
+
+19.写一个SQL语句，查询选修了’计算机原理’的学生学号和姓名（多个join on）
+select c.name
+from student s join sc on s.id = sc.sid
+join course c on c.id = sc.cid
+where s.name = ‘zhouxingchi';
+
+
+********************************************************************
+20.编写 SQL 语句，查询所有年龄比所属主管年龄大的人的ID和 NAME。
+create table t(
+id number(3),
+name char(20),
+age number(3),
+manager　number(3)
+);
+insert into t values(106,'A',30,104);
+insert into t values(109,'B',30,104);
+insert into t values(104,'C',30,111);
+insert into t values(107,'D',30,109);
+insert into t values(112,'E',30,120);
+insert into t values(119,'F',30,NULL);
+
+select employee.name 
+from test employee 
+where employee.age > (select manager.age 
+from test manager 
+where manager.id=employee.manager);
+
+
+21.PPT案例中最后一道题
+1、如何算出一班(class_id=1)每个学生各科的成绩？
+select s.student_name, sub.subject_name, p.test_score
+from t_student s join t_performance p
+on s.student_id = p.student_id
+join t_subject sub 
+on sub.subject_id = p.subject_id
+where s.class_id = 1; 
+
+2、请对一班(class_id=1)每个学生各科成绩的总分进行排序。
+select s.student_name, sum(p.test_score) total_score
+from t_student s join t_performance p
+on s.student_id = p.student_id
+join t_subject sub 
+on sub.subject_id = p.subject_id
+where s.class_id = 1
+group by s.student_id, s.student_name
+order by total_score desc;
+(select中出现了s.student_name，所以在group by中添加这个字段)
+请注意：当select中出现聚合函数时，一定要特别注意，
+凡不在聚合函数中的其他字段，必须出现在group by子句中，但是
+反过来没有限制。

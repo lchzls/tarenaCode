@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+  //1.Number
+  var n = 3.1415926;
+  console.log(n.toFixed(2)); //3.14
+//2.Array
+//1).如何创建数组
+ //理解：js中的数组都是Object数组 
+var a1 = ["zhangsan",23,true];
+console.log(a1[0]);
+var a2 = new Array();
+a2.push("lisi");
+a2.push(25);
+a2.push(false);
+console.log(a2[0]);
+//2)数组倒序
+//数组的方法直接修改原数组
+var arr = [5,1,8,12,6,3];
+arr.reverse();
+console.log(arr);
+//3)数组排序
+//arr.sort();输出结果按照字符串大小排序
+//自定义排序，通常使用匿名函数
+arr.sort(function(a,b){
+	return a-b;
+}); 
+console.log(arr);
+//3.Math
+console.log(Math.PI);
+console.log(Math.round(5.6));
+//4.Date
+var d1 = new Date();
+var d2 = new Date("2016/10/01 12:12:12");
+console.log(d1); //Thu Sep 29 2016 16:52:41 GMT+0800 (中国标准时间) 这一天为周四
+console.log(d2); //Sat Oct 01 2016 12:12:12 GMT+0800 (中国标准时间)
+console.log(d1.toLocaleDateString()); //2016/9/29
+console.log(d1.toLocaleTimeString()); //下午4:52:41
+console.log(d1.getFullYear()); //2016
+console.log(d1.getMonth()); //8
+console.log(d1.getDate());//29
+console.log(d1.getDay()); //4 js中0代表周日，故星期四则为4，而java中是1代表周日 
+
+//5.RegExp
+var str = "you can you up,no can no bb.";
+var reg = /no/;
+//5.1 正则对象的方法
+//1)reg.test(str)
+//非全局模式下，检测str中是否包含和reg匹配的子串
+console.log(reg.test(str)); //true
+//2)reg.exec(str)
+//非全局模式下，从str中找出第一个和reg匹配的子串
+console.log(reg.exec(str)); //["no", index: 15, input: "you can you up,no can no bb."]
+//全局模式下，第N次调用该方法则返回str中与reg匹配的第N个子串 
+reg = /no/g;
+console.log(reg.exec(str)); //["no", index: 15, input: "you can you up,no can no bb."]
+console.log(reg.exec(str)); //["no", index: 22, input: "you can you up,no can no bb."]
+console.log(reg.exec(str)); //null
+//5.2 String中支持正则的方法
+//1)str.replace("hi","hello"); 只能替换第一个hi
+//如果想要将所有的hi替换为hello，则使用正则表达式的全局模式如
+//str.replace(reg,"目标");
+console.log(str.replace(reg,"bu")); //you can you up,bu can bu bb.
+//2)str.match(reg)
+//从str中找出和reg匹配的子串
+console.log(str.match(reg)); //["no", "no"]
+//["no","no"]，字符串还是之前的字符串，因此，js中字符串也是不可变的，上面的str.replace(reg,"bu")不能影响到str 
+//3)str.search(reg);
+//从str中找出第1个和reg匹配的子串索引
+console.log(str.search(reg)); //15
+
+//6.Function
+//打开网页时，浏览器执行到此处仅仅是创建了一个函数对象，并没有去调用这个函数 
+function sum(){
+	var s =0;
+	if(arguments.length!=0){
+		for(var i=0;i<arguments.length;i++){
+			s += arguments[i];
+		}
+	}
+	return s;
+}
+//打开网页时直接调用函数
+console.log(sum(1,2,3));
+console.log(sum(1,2,3,4));
+
+</script>
+</head>
+<body>
+</body>
+</html>

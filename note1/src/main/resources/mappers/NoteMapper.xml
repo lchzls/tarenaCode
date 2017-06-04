@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="cn.tedu.note.dao.NoteDao">
+
+	<update id="updateStatus" parameterType="string">
+	update cn_note 
+	set cn_note_status_id = '2'
+	where cn_note_id = #{noteId}
+	</update>
+	<!-- 组合查询 ，这里的参数，可以用map，也可以用实体类。这里为了简单，使用map-->
+	<select id="hightSearch" parameterType="map" 
+	resultType="map">
+	select cn_note_id,
+		cn_note_title,
+		cn_note_create_time
+	from cn_note  <!-- title是map中的key -->
+	<where> <!-- where标签，作用，比如如果第二个添加满足，则sql自动去掉多余的and或者or，使得sql语句正确 -->
+		<if test="title!=null">
+		 cn_note_title like #{title} 
+		</if>
+		<if test="status!=null">
+		and cn_note_status_id = #{status}
+		</if>
+		<if test="beginDate!=null">
+		and cn_note_create_time >=#{beginDate}
+		</if>
+		<if test="endDate!=null">
+		and cn_note_create_time&lt;=#{endDate}
+		</if>
+	</where>
+	</select>
+
+	<select id="findNotesByNotebookId" 
+	parameterType="string" resultType="map">
+	select 
+		cn_note_id as "id",
+		cn_note_title as "title"
+	from 
+		cn_note
+	where 
+		cn_notebook_id = #{notebookId}
+		and cn_note_status_id = 1;
+	</select>
+	
+	<select id="findNoteById" parameterType="string"
+	resultType="cn.tedu.note.entity.Note">
+	select
+			cn_note_id as id,
+			cn_notebook_id as notebookId,
+			cn_user_id as userId,
+			cn_note_status_id as statusId,
+			cn_note_type_id as typeId,
+			cn_note_title as title,
+			cn_note_body as body,
+			cn_note_create_time as createTime,
+			cn_note_last_modify_time as lastModifyTime
+		from
+			cn_note 
+		where
+			cn_note_id=#{id}
+	</select>
+	
+	<!-- 采用动态map传递动态参数,if标签是mybatis提供了动态参数拼接功能 -->
+	<update id="updateNote" parameterType="map">
+	update 
+		cn_note
+	set 
+		<if test="notebookId!=null">
+			cn_notebook_id = #{notebookId},
+		</if>
+		<if test="userId!=null">
+			cn_user_id = #{userId},
+		</if>
+		<if test="statusId!=null">
+			cn_note_status_id = #{statusId},
+		</if>
+		<if test="typeId!=null">
+			cn_note_type_id = #{typeId},
+		</if>
+		<if test="title!=null">
+			cn_note_title = #{title},
+		</if>
+		<if test="body!=null">
+			cn_note_body = #{body},
+		</if>
+		cn_note_last_modify_time=#{lastModifyTime}
+	where
+		cn_note_id=#{id}
+	</update>
+	
+	<select id="countNotesById" parameterType="string"
+	resultType="int">
+	select 
+		count(*)
+	from
+		cn_note
+	where 
+		cn_note_id=#{id}
+	</select>
+	
+	<insert id="addNote" parameterType="cn.tedu.note.entity.Note">
+		insert into cn_note 
+			(cn_note_id,
+			cn_notebook_id,
+			cn_user_id,
+			cn_note_status_id,
+			cn_note_type_id,
+			cn_note_title,
+			cn_note_body,
+			cn_note_create_time,
+			cn_note_last_modify_time)
+		values
+		(#{id},#{notebookId},#{userId},#{statusId},#{typeId},#{title},#{body},
+		#{createTime},#{lastModifyTime})
+	</insert>
+</mapper>

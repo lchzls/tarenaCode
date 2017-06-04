@@ -1,0 +1,140 @@
+
+1:创建一个视图，包含20号部门的员工信息，字段:empno,ename,sal,job,deptno
+create or replace view view1 
+as
+select empno,ename,sal,job,deptno
+from emp_lch
+where deptno = 20;
+2:创建一个序列seq_emp_no,从10开始，步进为10
+create sequence seq_emp_no 
+start with 10
+increment by 10;
+3:编写SQL语句查看seq_emp_no序列的下一个数字
+select seq_emp_no.nextval from dual;
+4:编写SQL语句查看seq_emp_no序列的当前数字
+select seq_emp_no.currval from dual;
+5:为emp表的ename字段添加索引:idx_emp_ename 
+create index idx_emp_ename 
+on emp_lch(ename);
+6:为emp表的LOWER(ename)字段添加索引:idx_emp_lower_ename
+create index idx_emp_lower_ename
+on emp_lch(lower(ename));
+7:为emp表的sal,comm添加多列索引
+create index sal_comm_index
+on emp_lch(sal,comm);
+8:创建myemployee表，字段:
+  id NUMBER(4) ,
+  nameVARCHAR2(20),
+  birthday DATE,
+  telephone VARCHAR2(11)
+  scoreNUMBER(9,2)
+  其中id作为主键，name要求不能为空,telephone需要唯一,score值必须>=0
+  create table myemployee3(
+  id NUMBER(4) primary key ,
+  name VARCHAR2(20) not null,
+  birthday DATE,
+  telephone VARCHAR2(11) unique,
+  score NUMBER(9,2) check(score>0)
+  );
+
+
+
+9.创建视图
+CREATE VIEW v_student
+    AS
+    SELECT class_id, avg(score) avg_score
+    FROM student
+    GROUP BY class_id;
+
+在视图v_student中，执行如下SQL语句：
+update v_student set avg_score =80 where class_id=101；
+执行上述SQL语句，将产生的结果是什么？
+报错（此视图的数据操作操纵操作非法），原因，avg(score)是函数，复杂视图不允许DML操作。
+
+
+
+10.删除视图
+drop view v_student(请注意，不是delete)
+
+
+*********************************************(思路有点不清晰）
+
+11.创建一个视图v_mgr_salary，列出每个主管的名字，以及他的下属中的最高薪水和最低薪水。
+
+ename   max_sal    min_sal
+JONES   3000       3000
+FORD    800         800
+CLARK   1300       1300
+SCOTT   1100       1100
+
+
+创建视图v_mgr_salary的SQL语句如下所示：
+createorreplaceviewv_mgr_salary
+as
+select m.ename, max(w.sal) max_sal, min(w.sal) min_sal
+from emp w join emp m
+on w.mgr = m.empno
+group by m.ename；
+
+首先查询出mgr对应的名字（通过自身两个表连接），这样就能查出，比如，w表中mgr=1233的这个主管名字在m表中为SCOTT,他的下属即可以通过w这个表进行查询。
+然后，对w这个表进行工资的计算。
+
+
+
+1 简述视图的意义
+
+参考答案
+视图的意义在于两个方面：
+1）简化复杂查询。如果需要经常执行某项复杂查询，可以基于这个复杂查询建立视图，此后查询此视图即可。
+2）限制数据访问。视图本质上就是一条SELECT语句，所以当访问视图时，只能访问到所对应的SELECT语句中涉及到的列，对基表中的其它列起到安全和保密的作用。
+
+
+
+8 简述索引的原理及创建索引的意义
+
+参考答案
+索引是对表的一列或多列进行排序的结构。因为绝大多数的搜索方法在搜索排序结构时效率都会大大提高，所以如果表中某一列经常被作为关键字搜索，则建议对此列创建索引。
+索引提供指针以指向存储在表中指定列的数据值，根据指定的排序次序排列这些指针。数据库使用索引的方式与使用书的目录很相似：通过搜索索引找到特定的值，然后跟随指针到达包含该值的行。
+
+
+ 列举需要创建索引以及不适合创建索引的场合
+
+参考答案
+适合创建索引的场合为：
+1）为经常出现在WHERE子句中的列创建索引。
+2）为经常出现在ORDER BY、DISTINCT后面的字段建立索引。如果建立的是复合索引，索引的字段顺序要和这些关键字后面的字段顺序一致。
+3）为经常作为表的连接条件的列上创建索引
+不适合创建索引的场合为：
+1）不要在经常做DML操作的表上建立索引。
+2）不要在小表上建立索引。
+3）限制表上的索引数目，索引并不是越多越好。
+11 简述主键选取的原则
+
+参考答案
+主键的选取原则如下：
+1）主键应是对系统无意义的数据。
+2）永远也不要更新主键，让主键除了唯一标识一行之外，再无其他的用途。
+3）主键不应包含动态变化的数据，如时间戳。
+4）主键应自动生成，不要人为干预，以免使它带有除了唯一标识一行以外的意义。
+5）主键尽量建立在单列上。
+
+1.sc表的学号列（sid），外键关联学生表（student）的学号列（id）。
+alter table sc add constraint sc_sid_student_fk FOREIGN KEY (sid) references student(id);
+
+
+2.sc表的课程编号列（cid），外键关联课程表（course）的编号列（id）。
+alter table sc add constraint sc_cid_student_fk FOREIGN KEY (cid) references course(id);
+
+
+13 简述外键约束的意义
+
+参考答案
+外键约束维护数据的一致性。外键约束条件包括两个方面的数据约束：
+1）从表上定义的外键的列值，必须从主表被参照的列值中选取，或者为NULL。
+2）当主表参照列的值被从表参照时，主表的该行记录不允许被删除。
+14 简述外键约束对性能的影响，以及应对策略
+
+参考答案
+如果在一个频繁DML操作的表上建立外键，每次DML操作，都将导致数据库自动对外键所关联的对应表做检查，产生开销，如果已在程序中控制逻辑，这些判断将增加额外负担，可以省去；外键确定了主从表的先后生成关系，有时会影响业务逻辑。
+
+

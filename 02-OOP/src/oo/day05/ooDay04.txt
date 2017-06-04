@@ -1,0 +1,562 @@
+回顾:
+1.方法的重写(override):
+    父子类，方法签名相同，方法体不同
+	重写方法被调用时，看对象的类型
+2.重写与重载的区别
+    重载:一个类中，方法名相同，参数列表不同，方法体不同
+	     编译期，引用的类型
+    重写:运行期，对象的类型
+3.package和import
+4.访问控制修饰符:
+    public private protected 默认
+5.static:静态的
+    类，一份，类名.来访问
+	静态变量:所有对象的数据都一样，所有对象共享的数据
+	静态方法:方法的操作仅与参数相关而与对象无关
+	静态块:加载静态资源(图片、音频、视频...)
+6.final:最终的
+    变量不可被改变
+	方法不可被重写
+	类不可被继承
+
+
+笔记:
+1.static final常量:
+  1)必须声明的同时初始化
+  2)通过类名.来访问，不能被改变
+  3)建议:常量名所有字母都大写
+  4)编译器在编译时被自动替换为具体的值，效率高
+2.抽象方法:
+  1)由abstract修饰
+  2)抽象方法只有方法的定义，没有具体的实现(连大括号都不写)
+3.抽象类:
+  1)由abstract修饰
+  2)包含抽象方法的类必须是抽象类
+    不包含抽象方法的类也可以声明为抽象类---我乐意
+  3)抽象类不能被实例化
+  4)抽象类是需要被继承的，子类:
+    4.1)重写父类的所有抽象方法--建议
+	4.2)也可以声明为抽象类------不建议
+  5)抽象类的意义:
+    5.1)封装子类共有的属性和行为，被子类共用
+	5.2)为所有子类提供了公共的类型---向上造型
+	5.3)可以包含抽象方法，为所有子类提供一个统一的入口 
+4.接口:
+  1)是一个标准、规范
+    遵守这个标准、规范，就能够去干某件事---API之后
+  2)由interface定义
+  3)只能包含常量和抽象方法
+  4)接口不能被实例化
+  5)接口是需要被实现/继承的，实现类/子类:
+      必须重写接口中的所有抽象方法
+  6)一个类可以实现多个接口，用逗号隔开
+    若既继承又实现时，应先继承后实现
+  7)接口可以继承接口
+
+
+
+
+练习一:
+  1.完成银行卡系统
+  2.独立完成求一组图形最大面积
+练习二:
+  1.创建oo.day06的包，在该包中:
+      独立完成银行卡系统
+
+
+
+
+
+
+
+
+
+
+UnionPayTest
+
+
+
+
+ICBCImpl card1 = new ICBCImpl();
+ICBC     card2 = new ICBCImpl(); //向上造型
+UnionPay card3 = new ICBCImpl(); //向上造型
+
+
+
+interface UnionPay{ //联银接口
+  void 存钱();
+  void 取钱();
+  void 转帐();
+}
+interface ICBC extends UnionPay{ //工行接口
+  void 在线支付();
+}
+interface ABC extends UnionPay{ //农行接口
+  void 支付电话费();
+}
+
+
+UnionPay icbc = new ICBCImpl(2000,"123456");
+Scanner scan = new Scanner(System.in);
+System.out.println("请输入密码:");
+if(icbc.checkPwd(scan.next())){
+  
+}else{
+  System.out.println("密码错误");
+}
+
+
+
+
+
+
+double num = input.nextDouble();
+卡的钱比取的钱少2000
+if(卡的钱-取的钱>=-2000){
+}
+
+
+class ICBCImpl implements ICBC{ //工行卡
+  public void 存钱(){}
+  public void 取钱(){}
+  public void 转帐(){}
+  public void 在线支付(){}
+}
+
+class ABCImpl implements ABC{ //农行卡
+  public void 存钱(){}
+  public void 取钱(){}
+  public void 转帐(){}
+  public void 支付电话费(){}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+接口是对继承单根性的扩展
+
+
+InterfaceDemo
+
+
+
+类和类--------------继承(extends)
+接口和接口----------继承
+类和接口------------实现(implements)
+
+
+
+
+Inter2 o1 = new Aoo(); //向上造型
+Inter1 o2 = new Aoo();
+
+interface Inter1{
+  void show();
+  void say();
+}
+interface Inter2 extends Inter1{
+  void sayHi();
+}
+class Aoo implements Inter2{
+  public void sayHi(){}
+  public void show(){}
+  public void say(){}
+}
+
+
+
+
+
+
+
+
+
+
+
+interface Inter1{
+  void show();
+}
+interface Inter2{
+  void say();
+}
+abstract class Aoo{
+  abstract void sayHi();
+}
+class Boo extends Aoo implements Inter1,Inter2{
+  public void show(){}
+  public void say(){}
+  public void sayHi(){}
+}
+
+
+
+
+
+
+
+
+interface Inter1{
+  void show();
+  void say();
+}
+interface Inter2{
+  void sayHi();
+}
+class Aoo implements Inter1,Inter2{
+  public void show(){}
+  public void say(){}
+  public void sayHi(){}
+}
+
+
+
+
+
+
+
+
+
+interface Inter1{
+  void show();
+  void say();
+}
+class Aoo implements Inter1{
+  public void show(){}
+  public void say(){}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+new Inter1(); //编译错误
+Inter1 o; //正确
+
+interface Inter1{
+  public static final int NUM = 5;
+  public abstract void show();
+  void say(); //默认public abstract
+  double PI = 3.14159; //默认public static final
+
+  void sayHi(){} //编译错误
+  int count; //编译错误
+}
+
+
+
+
+
+
+
+
+  
+
+生活中的接口:
+1)电脑厂商留USB接口---------制定标准、规范
+  U盘、鼠标、摄像头等-------遵守标准、规范
+2)国家对商品房--------------制定标准、规范
+  国家对家具、家电等--------制定标准、规范
+  开发商、家具、家电厂商----遵守标准、规范
+3)银行----------------------制定标准、规范
+  银行卡--------------------遵守标准、规范
+  
+
+
+
+
+
+
+
+
+
+
+
+
+ShapeTest
+
+
+
+
+
+
+
+
+
+
+
+new T();
+new J();
+new O();
+......
+new Tetromino(); //永远也不会写
+
+
+abstract class Tetromino{
+  Cell[] cells;
+  void drop(){}
+  void moveLeft(){}
+  void moveRight(){}
+  void print(){}
+}
+class T extends Tetromino{
+}
+class J extends Tetromino{
+}
+
+
+
+
+
+
+
+
+
+abstract class Animal{ //是动物都能跑
+  abstract void run();
+}
+class Tiger extends Animal{
+  void run(){ 在地上跑 }
+}
+class Fish extends Animal{
+  void run(){ 在水里游 }
+}
+class Bird extends Animal{
+  void run(){ 在天上飞 }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Shape s1 = new Square(1);
+Shape s2 = new Circle(1);
+Shape s3 = new Six(1);
+
+
+Shape[] shapes = new Shape[9];
+shapes[0] = new Square(1);
+shapes[1] = new Square(2);
+shapes[2] = new Square(3);
+shapes[3] = new Circle(1);
+shapes[4] = new Circle(2);
+shapes[5] = new Circle(3);
+shapes[6] = new Six(1);
+shapes[7] = new Six(2);
+shapes[8] = new Six(3);
+
+double max = shapes[3].area();
+for(int i=1;i<shapes.length;i++){
+  double area = shapes[i].area();
+  if(area>max){
+    max = area;
+  }
+}
+System.out.println("最大面积为:"+max);
+
+
+abstract class Shape{ //抽象类--不完整
+  double c;
+  abstract double area(); //抽象方法--不完整
+}
+class Square extends Shape{
+  double area(){ //重写抽象方法--变不完整为完整
+    return 0.0625*c*c; 
+  }
+}
+class Circle extends Shape{
+  double area(){
+    return 0.0796*c*c;
+  }
+}
+class Six extends Shape{
+  double area(){
+    return 0.0721*c*c;
+  }
+}
+
+
+
+
+
+给我一组图形，找出这组图形中的最大面积
+Square[] ss = new Square[3];
+ss[0] = new Square(1);
+ss[1] = new Square(2);
+ss[2] = new Square(3);
+
+Circle[] cs = new Circle[3];
+cs[0] = new Circle(1);
+cs[1] = new Circle(2);
+cs[2] = new Circle(3);
+
+Six[] sixes = new Six[3];
+sixes[0] = new Six(1);
+sixes[1] = new Six(2);
+sixes[2] = new Six(3);
+
+1)找出ss中的最大面积sMax
+2)找出cs中的最大面积cMax
+3)找出sixes中的最大面积sixMax
+3)找出sMax与cMax与sixMax的最大面积max
+
+
+
+
+
+
+
+
+
+
+Shape s; //正确
+new Shape(); //编译错误
+
+
+
+
+
+
+
+
+
+
+
+abstract class Shape{ //抽象类--不完整
+  double c;
+  abstract double area(); //抽象方法--不完整
+}
+class Square extends Shape{ //方形
+  double area(){ //重写抽象方法--变不完整为完整
+    return 0.0625*c*c;
+  }
+}
+class Circle extends Shape{ //圆形
+  double area(){
+    return 0.0796*c*c;
+  }
+}
+abstract class Six extends Shape{ //六边形
+}
+
+
+Shape s; //正确
+new Shape(); //编译错误
+
+
+
+
+new Car(); //不合理
+
+abstract class Car{
+  void run(){
+    ......
+  }
+  abstract void stop();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+package a;
+class Aoo{
+}
+
+package b;
+class Aoo{
+}
+
+package c;
+class Moo{
+  void show(){
+    a.Aoo o = new a.Aoo();
+	b.Aoo oo = new b.Aoo();
+  }
+}
+
+
+
+
+
+
+
+
+
+
+class Aoo{
+  int a; //实例变量
+  static int b; //静态变量
+  void show(){} //实例方法
+  static void say(){} //静态方法
+}
+
+
+
+
+
+
+
+两同两小一大:
+一大: 子类的访问权限大于或等于父类的
+private,默认,protected,public
+
+class Aoo{
+  public void show(){}
+}
+class Boo extends Aoo{
+  public void show(){}
+}
+
+
+
+
+
+Boo o = new Boo();
+o.say();
+o.say("zhangsan");
+
+class Aoo{
+  void say(){}
+}
+class Boo extends Aoo{
+  void say(String name){} //重载
+}

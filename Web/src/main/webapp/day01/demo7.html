@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>表单</title>
+</head>
+<body>
+   <form action="http://www.tmooc.cn">
+    <p>
+     <!-- label是表单中的文本，通过for属性可以绑定到input元素上，使得点击此label时相当于点击了对应的input
+     id是元素的身份证号，用来引用该元素 -->
+     <label for="user_name">账号：</label>
+     <input type="text" id="user_name"/>
+    </p>
+     <p>
+       <label for="pwd">密码：</label>
+       <input type="password" id="pwd"/>
+     </p>
+     <p>
+     <input type="radio" id="male" name="sex"/>
+     <lable for="male">男</lable>
+     <input type="radio" id="fmale" name="sex"/>
+     <lable for="fmale">女</lable>
+     </p>
+     <p>
+               兴趣
+     <input type="checkbox" id="basketball" name="loves" checked/>
+     <lable for="basketball">篮球</lable>
+     <input type="checkbox" id="basketball" name="loves"/>
+     <lable for="football">足球</lable>
+     <input type="checkbox" id="basketball" name="loves"/>
+     <lable for="pingpang">乒乓球</lable>
+     </p>
+     <p>
+     <input type="submit" value="提交"/>
+     <input type="reset" value="重置"/>
+     <input type="button" value="取消"/>
+     </p>
+     <!-- 隐藏域=隐藏 的文本框 
+     用来封装一些不希望被用户看到的数据
+    该控件中的数据不需要输入，而是预置
+     -->
+     <p>
+      <input type="hidden" value="123"/>
+     </p>
+     <p>
+     <!-- 文件选择框 -->
+     <label for="attachment">上传附件：</label>
+     <input input type="file" id="attachment"/>
+      </form>
+     </p>
+     
+      
+      <p>
+      <label for="desc">自我介绍</label>
+      <textarea  id="desc" cols="20" rows="10">
+         历史老师就发了说说来试试事实上事实上事实上死了啦啦啦啦啦啦啦啦啦啦啦啦来试试事实上事实上撒啦啦啦啦啦啦啦啦啦啦了啦啊啊啊啊啊啊啊啊啊啊啊啊啊
+         李啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
+      </textarea>
+      </p>
+</body>
+</html>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

@@ -1,0 +1,6 @@
+<beans>
+	<bean id="goo"
+		class="cn.tedu.demo.Goo"/>
+	<bean id="date"
+		class="java.util.Date"/> 
+</beans>

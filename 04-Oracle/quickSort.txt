@@ -1,0 +1,52 @@
+import java.util.Arrays;
+
+public class Sort {
+  
+	public static void main(String[] args) {
+		Sort s = new Sort();
+		int[] arr = {6,7,8,5,3,12};
+		int left = 0;
+		int right = arr.length-1;
+		s.quickSort(arr, left, right);
+		System.out.println(Arrays.toString(arr));
+		
+	}
+	
+	void quickSort(int[] arr,int left,int right){//小红在左边，小红在右边
+		int dp;
+		if(left<right){
+			dp = part(arr,left,right);
+			//接收第一轮排序后基数的位置
+			quickSort(arr,left,dp-1);
+			quickSort(arr,dp+1,right);
+			
+		}
+	}
+	
+	//void part(int[] arr,int left,int right){
+	int part(int[] arr,int left,int right){
+		//1.存基数
+		int temp = arr[left]; //不要写死
+		while(left<right){
+			//小红先走
+			while(temp<arr[right]&&left<right){
+				right--;
+			}
+			//小红强行塞值给小红，小红被挤到前一位
+			if(left<right){
+				arr[left++]=arr[right];
+			}
+			//轮到小明走
+			while(left<right&&arr[left]<=temp){
+				left++;
+			}
+			//小明强行将值塞给小红，小红要往左走一步
+			if(left<right){
+				arr[right--]=arr[left];
+			}
+		}
+		arr[left] = temp;//基数归位
+		return left; //返回小明最后站的位置
+	}
+	
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>图片轮播</title>
+    <meta charset="utf-8" />
+    <style type="text/css">
+   
+      .photo {
+        list-style-type: none;
+        border: 2px solid #ccc;
+        width: 218px;
+		height: 218px;
+        margin:0;
+        padding:0;
+      }
+      .photo li {
+       width: 218px;
+	   height: 218px;
+        margin: 0;
+        padding: 0;
+      }
+      .show{
+        display: block;
+      }
+      .hide{
+        display: none;
+      }
+    </style>
+    <script type="text/javascript">
+      var timer;
+      var index = 0;
+      function start() {
+        timer = setInterval(function(){
+          var ul = document.getElementById("photo");
+          var lis = ul.getElementsByTagName("li");
+          for(var i=0;i<lis.length;i++) {
+            lis[i].className = "hide";
+          }
+          index++;
+          lis[index%lis.length].className = "show";
+        }, 1000);
+      }
+      function stop() {
+        clearInterval(timer);
+      }
+    </script>
+  </head>
+  <body onload="start();">
+    <h1>图片轮播</h1>
+    <ul class="photo" id="photo"
+      onmouseover="stop();" onmouseout="start();">
+      <li class="show">
+        <img src="../images/01.jpg">
+      </li>
+      <li class="hide">
+        <img src="../images/02.jpg">
+      </li>
+      <li class="hide">
+        <img src="../images/03.jpg">
+      </li>
+      <li class="hide">
+        <img src="../images/04.jpg">
+      </li>
+    </ul>
+  </body>
+</html>

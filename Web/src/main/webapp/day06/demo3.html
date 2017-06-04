@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+  .ok{
+  color:green;
+  }
+  .error{
+  color:red;
+  }
+</style>
+<script type="text/javascript">
+ function checkCode(){
+	// console.log("1");
+	
+	//从文本框中获取账号
+	var code = 
+		document.getElementById("code").value;
+	//获取span
+	var span = document.getElementById("codemsg");
+	//写正则表达式判断账号的样式
+	var reg = /^\w{5,10}$/;  ///\w{5,10}/表示只要有部分满足条件即可，加上^$表示整个字符串从开始到结束都需要满足正则表达式 
+	if(reg.test(code)){
+		//正确，将span内的文字设置为绿色
+		span.className = "ok";
+		return true;
+	}else{
+		//错误，将span内的文字设置为红色
+		span.className="error";
+		return false;
+	}
+ }
+ function checkPwd(){
+	 //获取密码
+	 var pass = document.getElementById("pass").value;
+	 //获取span框
+	 var span = document.getElementById("passmsg");
+	 var reg = /^\w{10,20}$/;
+	 if(reg.test(pass)){
+		 //正确，将span内的文字设置为绿色
+		 span.className="ok";
+		 return true;
+	 }else{
+		//错误，将span内的文字设置为红色
+		span.className="error";
+		return false;
+	 }
+ }
+</script>
+</head>
+<body>
+  <form action="http://www.tmooc.cn" 
+  onsubmit="return checkCode()+checkPwd()==2">
+   <p>
+   账号:
+   <input type="text" id="code" onblur="checkCode();"/>
+   <span id="codemsg">5-10位字母、数字、下划线</span>
+   </p>
+   <p>
+   密码:
+   <input type="password" id="pass" onblur="checkPwd();"/>
+   <span id="passmsg">10-20位字母、数字、下划线</span>
+   </p>
+   <p>
+   <!-- 注意，这里是submit，不能写成button，否则onsubmit事件不会执行 -->
+   <input type="submit" value="登录"/>
+   </p>
+  </form>
+</body>
+</html>

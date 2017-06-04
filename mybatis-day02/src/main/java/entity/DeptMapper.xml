@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- 要求1：映射文件的namespace必须等于mapper映射器的完整的名字 -->
+<mapper namespace="dao.DeptDAO">
+	
+	<insert id="save" parameterType="entity.Dept">
+		insert into dept1_lch values(dept_seq.nextval,#{deptName},#{loc})
+	</insert>
+	
+	<select id="findAll" resultType="entity.Dept">
+		select * from dept1_lch
+	</select>
+	
+	<select id="findById" parameterType="int" resultType="entity.Dept">
+		select * from dept1_lch where id = #{id1}
+	</select>
+	
+	<select id="findById2" parameterType="int" resultType="map">
+		select * from dept1_lch where id=#{id1}
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from dept1_lch where id=#{id1}
+	</delete>
+	
+	<update id="update" parameterType="entity.Dept">
+		update dept1_lch set deptName=#{deptName},loc=#{loc} where id=#{id}
+	</update>
+</mapper>

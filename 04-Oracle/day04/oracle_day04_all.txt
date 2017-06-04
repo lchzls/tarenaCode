@@ -1,0 +1,220 @@
+查看与CLARK相同职位的员工
+select ename,job from emp_lch where job = (
+select job from emp_lch where ename = 'CLARK');
+2:查看低于公司平均工资的员工
+select ename,sal from emp_lch where sal<(select avg(sal) from emp_lch);
+3:查看与ALLEN同部门的员工
+select ename,deptno from emp_lch where deptno = (
+select deptno from emp_lch where ename = 'ALLEN');
+4:查看平均工资低于20号部门平均工资的部门平均工资
+两种方法均可：
+select e1.deptno,e1.avg_sal from (
+select avg(sal) avg_sal,deptno from emp_lch group by deptno) e1
+where e1.avg_sal<(select avg(sal) avg_sal2 from emp_lch where deptno = 20);
+
+方法二更加简单些！
+select deptno,avg(sal) 
+from emp_lch 
+group by deptno
+having avg(sal)<(select avg(sal) from emp_lch where deptno = 20);
+
+5:查看低于自己所在部门平均工资的员工
+select ename,sal from emp_lch e1,(
+select avg(sal) avg_sal,deptno from emp_lch group by deptno) e2
+where e1.deptno = e2.deptno and e1.sal<e2.avg_sal;
+
+6:查看公司工资排名的第1-5名
+select rownum rn,ename,sal from (
+select ename,sal from emp_lch order by sal) e
+where rownum<=5;
+
+7:查看CLERK职位的人数和其他职位的总人数各多少?
+select count(*),decode(job,'CLERK','CLERK','OTHER')
+from emp_lch
+group by decode(job,'CLERK','CLERK','OTHER');
+8:查看每个职位的工资排名
+select ename,job,sal,
+row_number() over (
+partition by job
+order by sal)
+from emp_lch;
+9:查看每个职位的工资排名，若工资一致，排名一致
+select ename,job,sal,
+rank() over (
+partition by job
+order by sal)
+from emp_lch;
+10:查看每个职位的工资排名，若工资一致，排名一致，不跳名次。
+select ename,job,sal,
+dense_rank() over (
+partition by job
+order by sal)
+from emp_lch;
+11:分别查看:同部门同职位，同职位，以及所有员工的工资总和
+--select sum(sal) from emp_lch;
+select deptno,job,sum(sal)
+from emp_lch
+group by 
+rollup(job,deptno);
+
+
+12:分别查看:同部门同职位，同职位，同部门以及所有员工的工资总和
+select deptno,job,sum(sal)
+from emp_lch
+group by 
+cube(job,deptno);
+13:分别查看同部门同职位和同职位的员工的工资总和
+select deptno,job,sum(sal)
+from emp_lch
+group by 
+grouping sets((job,deptno),(job));
+
+**********************************************************
+13.查询哪个部门的平均工资最高，列出部门编码和平均工资
+select deptno,avg(sal) from emp_lch 
+group by deptno having avg(sal)=
+(select max(avg(sal)) from emp_lch group by deptno)
+
+
+14.列出各个部门中工资最高的员工的信息：名字、部门号、工资
+select e1.ename,e1.deptno,e1.sal from emp_lch e1, (
+select deptno,max(sal) max_sal from emp_lch 
+group by deptno) e2
+where e1.deptno = e2.deptno and e1.sal = e2.max_sal;
+
+select ename,sal,deptno from emp_lch
+where (deptno,sal) in
+(select deptno,max(sal) from emp_lch group by deptno);
+
+15.查询和字母中包含字母u的员工在相同部门的员工信息
+select empno,ename from emp_lch
+where deptno in
+(select deptno from emp_lch where ename like '%U%');
+
+16.查询那些员工的薪水比本部门的平均薪水低
+方法1：（利用分组）
+select e1.ename,e1.sal,e1.deptno from emp_lch e1,
+(select deptno,avg(sal) avg_sal from emp_lch group by deptno) e2
+where e1.deptno = e2.deptno and e1.sal<e2.avg_sal;
+
+方法2：(主查询和子查询中表示同一部门）
+select ename,sal,deptno from emp_lch  a
+where sal<(select avg(sal) from emp_lch b
+where a.deptno = b.deptno);
+
+
+17.查询emp表前5条记录
+select * from emp_lch where rownum <5;
+
+18.查询第3-5条记录，无需排序
+select * from(
+select rownum num,e.* from emp_lch e)
+where num >=3 and num<=5;
+ 
+
+19.查询公司工资最高的三个人
+select * from (
+select * from emp_lch order by sal desc)
+where rownum <=3;
+
+
+20.查询公司工资最低的五个人
+select rownum, from (
+select * from emp_lch order by sal )
+where rownum <=5;
+
+21.查询公司工资第6-10名的人
+select * from (
+select rownum rn,e.* from (
+select * from emp_lch order by sal ) e
+where rownum <=10)
+where rn>=6;
+注意，select ename,job from emp_lch where deptno = 10;
+执行顺序依次为，from哪个表，然后where，然后select列名。
+因此，
+select rownum rn,e.* from  e
+where rownum <=10) 此处还只能使用rownum，因为rn是在where语句后才生成的。若写成where rn <=10,则报错。
+
+
+22.创建表如下：
+
+create table sales_tab(
+year_id number not null,
+month_id number not null,
+day_id number not null,
+sales_value number(10,2) not null);
+
+*************************************************（不熟练）
+对表中添加1000条记录：
+insert into sales_tab
+select trunc(DBMS_RANDOM.value(2010,1012)) as year_id,
+trunc(DBMS_RANDOM.value(1,13)) as month_id,
+trunc(DBMS_RANDOM.value(1,32)) as day_id,
+round(DBMS_RANDOM.value(1,100),2) as sales_value
+from dual
+connect by level<=1000;
+
+
+
+23. 哪些人不是别人的经理？
+select ename from emp_lch
+where empno not in ( select distinct mgr 
+from emp
+where mgr is not null) ;
+
+
+
+24.谁的薪水比FORD高？如果有多个同名，比任何一个叫FORD的人高就行。
+select ename from emp
+where sal > ANY( select sal from emp_lch
+where ename = 'FORD' ) ;
+
+
+25.哪个部门的人数比部门20的人数多？
+select deptno , count(*)
+from emp
+group by deptno
+having count(*)  > ( select count(*) from emp
+where deptno = 20 ) ;
+
+
+******************************************************************************
+26.列出员工的名字和职位，查询员工所在的部门平均薪水大于2000元的员工信息。
+错误思路：
+select ename,job
+from emp_lch 
+group by deptno
+having avg(sal)>2000; （实现不了，报错）
+
+正确的思维：对部门进行一个筛选
+select ename, job
+from emp_lch
+where deptno in (select deptno
+from emp_lch
+group by deptno
+having avg( nvl(sal,0)) > 2000 ) ;
+
+
+
+简述where子句中为什么不能写rownum>…
+
+参考答案
+rownum是伪列，随着结果集生成，返回的第一行分配的是1，第二行是2等等，生成的结果是依次递加的，没有1就不会有2，不返回的就不算，
+而且一旦生成，就不会变化。第一条返回的结果的rownum为1，不支持where做大于查询，只能做<和<=，但并不会报错，只是返回的数据为空，
+这是因为根本不能满足这样的where条件。 如where rownum>2,取回第1条数据的rownum为1，不满足，就舍弃这条记录。再看下一条，
+然后取第2条数据的rownum还是为1，还是不满足，再舍弃。以此类推，最终舍弃了所有的数据，这就是所谓不支持的原因。
+
+
+
+Oracle分页查询面试题
+写SQL语句，按新闻时间倒序排列，即最新的排在最前面，每页输出5条，查询出第二页。
+SELECT * FROM 
+( 
+SELECT A.*, ROWNUM RN 
+FROM (SELECT * FROM news order by occurtime desc) A 
+WHERE ROWNUM <= 10 )
+WHERE RN >= 6;
+
+
+
+

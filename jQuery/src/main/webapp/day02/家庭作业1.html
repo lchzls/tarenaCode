@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	table{border:1px solid red}
+	thead{background-color:#8ac1db;}
+	tbody{background-color:#0488BB;}
+	td{text-align:center;}
+</style>
+<script src="../JS/jquery-1.11.1.js"></script>
+<script>
+	$(function(){
+		$(":button:first").click(function(){
+			 
+			 var num = $(":text").eq(0).val();
+			 var pri = $(":text").eq(1).val();
+			 var sel = $(":text").eq(2).val();
+			 $(":text").eq(3).val(num*pri*sel*0.1); 
+		});
+		$(":button:last").click(function(){
+			var sel=parseFloat($(":text").eq(3).val());
+			var youzi=parseFloat($(":text").eq(4).val());
+			$(":text").eq(5).val(sel+youzi);
+		});
+	});
+	
+	
+</script>
+</head>
+<body>
+	<table>
+		<thead>
+		<tr id="i1">
+			<td>商品</td>
+			<td>数量</td>
+			<td>单价(￥)</td>
+			<td>折扣(几折)</td>
+			<td>&nbsp;&nbsp;</td>
+			<td>小计(￥)</td>
+			<td></td>
+			<td>邮资(￥)</td>
+			<td>&nbsp;&nbsp;</td>
+			<td>合计</td>
+		</tr>
+		</thead>
+		<tbody>
+		<tr id="i2">
+			<td>哈利波特</td>
+			<td><input type="text"//></td>
+			<td><input type="text" /></td>
+			<td><input type="text" /></td>
+			<td><input type="button" value="计算"/></td>
+			<td><input type="text"/></td>
+			<td>+</td>
+			<td><input type="text"/></td>
+			<td><input type="button" value="总计"/></td>
+			<td><input type="text"/></td>
+		</tr>
+		</tbody>
+	</table>
+</body>
+</html>

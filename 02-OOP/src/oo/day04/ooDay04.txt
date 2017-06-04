@@ -1,0 +1,501 @@
+回顾:
+1.内存管理:JVM
+    堆、栈、方法区
+2.继承:
+    代码复用、extends
+	父:共有的 子:特有的
+	继承后，子具有:父+子
+	单一继承、传递性
+	必须先构造父 子构造若不写则默认有个super()，
+	  若写了则不再默认提供
+3.super:当前对象的父类对象
+   super.成员变量名
+   super.方法名()
+   super()
+4.向上造型:
+  1)父类型的引用指向子类的对象
+  2)能点出来什么，看引用的类型
+
+
+
+笔记:
+1.方法的重写(override):覆盖、重新写
+  1)发生在父子类中，方法签名相同，方法体不同
+  2)重写方法被调用时，看对象的类型
+2.重写与重载的区别:常见面试题
+  1)重写(override):
+    1.1)发生在父子类中，方法名相同，参数列表相同，方法体不同
+	1.2)遵循"运行期"绑定，根据对象的类型调用方法
+  2)重载(overload):
+    2.1)发生在一个类中，方法名相同，参数列表不同，方法体不同
+	2.2)遵循"编译期"绑定，根据引用的类型绑定调用方法
+3.package:
+  1)作用:避免类名的冲突
+  2)包名常常有层次结构，建议:包名所有字母都小写
+  3)类的全称: 包名.类名
+  4)同包中的类不能同名
+  import:
+  1)同包中的类可以直接访问，
+    不同包中的类不能直接访问，有如下两种方式:
+	1.1)先import声明/引入，后使用----建议
+	1.2)类的全称----太长了，不建议
+4.访问控制修饰符:
+  1)public:公共的，任何类
+  2)private:私有的，本类
+  3)protected:受保护的，本类、子类、同包类
+  4)默认的:什么也不写，本类、同包类
+  类只能用public和默认的来修饰
+  类的成员如上4种都可以
+5.static:静态的
+  1)静态变量:
+    1.1)由static修饰
+	1.2)属于类的，存在方法区中，只有一份
+	1.3)常常通过类名.来访问
+	1.4)何时用:所有对象数据都一样时使用
+  2)静态方法:
+    2.1)由static修饰
+	2.2)存在方法区中，只有一份
+	2.3)常常通过类名.来访问
+	2.4)没有隐式this传递，静态方法中不能直接访问实例成员
+	2.5)何时用:方法的操作仅与参数相关而与对象无关时使用
+  3)静态块:
+    3.1)由static修饰
+	3.2)类被加载期间自动执行，
+	    因为类只被加载一次，所以静态块也只执行一次
+	3.3)何时用:常常用于初始化静态资源(图片、音频、视频...)
+6.final:最终的
+  1)修饰变量:变量不能被改变
+  2)修饰方法:方法不能被重写
+  3)修改类:  类不能被继承
+7.static final常量:
+
+
+练习一:
+  创建类Person，包含:name,age,address,
+     sayHi()方法，输出姓名、年龄、地址
+  创建类Student，继承Person，包含className
+    重写Person类的sayHi()方法，
+	输出姓名、年龄、地址以及班级名称
+  创建类Teacher，继承Person，包含salary
+    重写Person类的sayHi()方法，
+	输出姓名、年龄、地址以及工资
+练习二:
+  重写T类、J类、O类、L类、I类的print()方法并测试
+
+
+
+
+
+Cell,Tetromino,T,J,TJTest-----建议重写一次
+
+
+
+
+
+
+
+
+
+public class Aoo{ //正确
+}
+class Aoo{ //正确
+}
+protected class Aoo{ //编译错误
+}
+private class Aoo{ //编译错误
+}
+
+
+
+
+
+
+
+地图------------------------map.jpg(静态资源)
+大王叫我来巡山.mp3----------静态资源
+吸血鬼日记第6季第1集.avi----静态资源
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+实例变量用得多，注定了实例方法用得多
+静态变量用得少，注定了静态方法用得少
+
+
+
+
+
+
+
+
+drop()是与对象有关
+
+Cell c1 = new Cell(2,5);
+c1.drop();
+
+Cell c2 = new Cell(6,8);
+c2.drop();
+
+class Cell{
+  int row;
+  int col;
+  static void drop(){
+    row++;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+结论:
+  sort()的操作与对象无关仅与参数相关
+  
+Arrays.sort(arr);
+假设sort()不是静态的
+  Arrays a1 = new Arrays();
+  a1.sort(arr);
+
+  Arrays a2 = new Arrays();
+  a2.sort(arr);
+
+  Arrays a3 = new Arrays();
+  a3.sort(arr);
+
+
+
+
+
+
+
+
+
+
+结论:
+  sqrt()方法的操作仅与参数相关而与对象无关
+
+double b = Math.sqrt(25);
+假设sqrt()不是静态的:
+  任何对象访问sqrt()，最终的结果都是一样的
+  -----说明:sqrt()与对象无关
+
+  Math m1 = new Math();
+  double a = m1.sqrt(25); //5
+
+  Math m2 = new Math();
+  double a = m2.sqrt(25); //5
+
+  Math m3 = new Math();
+  double a = m3.sqrt(25); //5
+
+
+
+
+
+
+
+
+
+
+
+
+
+double a = Math.random();
+double b = Math.sqrt(25);
+Arrays.sort(arr);
+int[] c = Arrays.copyOf(m,6);
+
+
+
+
+
+
+
+
+
+class Aoo{
+  int a;
+  static int b;
+  void show(){ //有this传递
+    this.a = 1;
+	Aoo.b = 2;
+  }
+  static void say(){ //没有隐式的this的传递
+    a = 1; //编译错误
+	Aoo.b = 2;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Bank{
+  String cardId;
+  String cardPwd;
+  double balance;
+  static double per;
+}
+
+
+Student zs = new Student();
+zs.name = "zhangsan";
+zs.age = 25;
+zs.address = "langfang";
+
+Student ls = new Student();
+ls.name = "lisi";
+ls.age = 26;
+ls.address = "jiamusi";
+ls.className = "JSD1607";
+
+Student.className = "JSD1607";
+
+class Student{
+  String name;
+  int age;
+  String address;
+  static String className;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+StaticDemo
+
+
+
+成员变量:
+1.实例变量:
+    没有static修饰，
+	属于对象的，存在堆中
+	有几个对象有几份
+    通过对象.来访问
+2.静态变量:
+    由static修饰，
+	属于类的，存在方法区中
+	只有一份
+	通过类名.来访问
+
+class Aoo{
+  int a;
+  static int b;
+}
+
+
+
+
+
+
+
+
+oo.day04.vis
+Hoo
+Ioo
+Joo
+
+
+
+数据私有化，行为公开化
+
+
+class Bank{
+  private String cardId;
+  private String cardPwd;
+  private double balance;
+
+  public boolean payMoney(double money){
+    if(balance>=money){
+	  balance-=money;
+	  return true;
+	}
+	return false;
+  }
+
+  public boolean checkPwd(String pwd){
+    if(cardPwd.equals(pwd)){
+	  return true;
+	}
+	return false;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+package a;
+class Aoo{
+}
+class Boo{
+  void show(){
+    Aoo o = new Aoo();
+  }
+}
+
+package b;
+class Moo{
+  void show(){
+    Aoo o = new Aoo(); //编译错误
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+A公司:
+ package com.a.b.c;
+ class Aoo{
+ }
+
+B公司:
+ package com.m.b.c;
+ class Aoo{
+ }
+
+C公司:
+
+
+
+建议:
+域名反写 .  项目名称 . 模块名称       . 类名
+cn.tedu     manager  .  studentmanager .  
+com.taobao
+com.jd
+
+
+
+
+
+
+
+
+
+
+OverrideOverloadDemo
+
+
+
+
+
+
+Teacher zs = new Teacher();
+zs.name = "zhangsan";
+zs.age = 25;
+zs.address = "佳木斯";
+zs.salary = 5000;
+zs.sayHi(); //zhangsan,25,佳木斯,5000
+
+Doctor ls = new Doctor();
+ls.name = "lisi";
+ls.age= 26;
+ls.address = "天津";
+ls.level = "主任医师";
+ls.sayHi(); //lisi,26,天津
+
+
+Person zs = new Student(); //向上造型
+zs.name = "WKJ";
+zs.age = 37;
+zs.address = "河北廊坊";
+zs.className = "JSD1607";
+zs.sayHi(); //WKJ,37,河北廊坊,JSD1607
+
+
+class Person{
+  String name;
+  int age;
+  String address;
+  void sayHi(){
+    System.out.println(name+","+age+","+address);
+  }
+}
+class Student extends Person{
+  String className;
+  void sayHi(){
+    System.out.println(name+","+age+","+address+","+className);
+  }
+}
+class Teacher extends Person{
+  double salary;
+  void sayHi(){
+    System.out.println(name+","+age+","+address+","+salary);
+  }
+}
+class Doctor extends Person{
+  String level;
+}
+
+
+
+
+
+
+
+
+
+
+

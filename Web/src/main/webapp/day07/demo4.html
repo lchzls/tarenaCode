@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+  //1.location
+  function f1(){
+	  var b = confirm("您确定要离开本页吗？ ");
+	  if(b){
+		  //离开
+		  location.href="http://www.tmooc.cn";
+	  }
+  }
+  //2.location的刷新功能 
+  function f2(){
+	  location.reload();
+  }
+//3.history
+  function f3(){
+	  history.forward();
+  }
+  //4.屏幕的相关函数
+  function f4(){
+	  console.log(screen.width);
+	  console.log(screen.height);
+	  console.log(screen.availWidth); //屏幕可用的宽
+	  console.log(screen.availHeight);//屏幕可用的高 
+  }
+  //navigator
+  function f5(){
+	  console.log(navigator.userAgent);
+  }
+</script>
+</head>
+<body>
+  <input type="button" value="达内" onclick="f1();"/>
+  <input type="button" value="刷新" onclick="f2();"/>
+  <input type="button" value="前进" onclick="f3();"/>
+  <input type="button" value="屏幕" onclick="f4();"/>
+  <input type="button" value="基础" onclick="f5();"/>
+   <!-- 在控制台可以查看api（即按.就可以显示出来方法），比如按F12，输入history.back(); -->
+</body>
+</html>

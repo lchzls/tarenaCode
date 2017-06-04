@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	标题:<input type="text" id="title">
+	状态：<select id="status">
+		<!-- 数据库中的status的id要么为1要么为2，因此如果为0，这个状态的条件就不要加了 -->
+			<option value="2">全部</option>
+			<option value="1">正常</option>
+			<option value="0">删除</option>
+	   </select>
+	<br/>
+	开始日期：<input type="text" id="begin">
+	结束日期：<input type="text" id="end">
+	<input type="button" id="searchBtn" value="搜索">
+	<hr/>
+	结果列表
+</body>
+</html>

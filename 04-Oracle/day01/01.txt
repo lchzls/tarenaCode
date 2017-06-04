@@ -1,0 +1,125 @@
+什么是关系型数据库管理系统
+由关系、数据、数据之间的约束三者所组成的数据模型则称为RDBMS，即关系型数据库管理系统。
+
+简述结构化查询语言的分类
+1）数据定义语言（DDL）：Data Definition Language
+2）数据操纵语言（DML）：Data Manipulation Language
+3）事务控制语言（TCL）：Transaction Control Language
+4）数据查询语言（DQL）：Data Query Language
+5）数据控制语言（DCL）：Data Control Language
+
+
+
+
+SQL概述：
+DDL(数据定义语言)：
+用于建立，删除，修改数据库对象
+create:创建表或者其他对象结构
+alter：修改表或者其他对象结构
+drop:删除表或者其他对象结构
+truncate：删除表数据，保留表结构
+
+
+DML（数据操纵语言）:
+insert,update,delete
+
+英文环境可以采用如下插入语句实施插入：
+insert into student(id,name,birth) values(1001,'smith','12-JAN-89');
+中文环境可以采用如下插入语句实施插入：
+insert into student(id,name,birth) values(1001,'smith','12-1月-89');
+
+insert into student(id,name,birth) values(1001,'smith',to_date('1989-01-12','yyyy-mm-dd'));
+但是，如果这样写：
+insert into student(id,name,birth)
+values(1001,'smith','1989-01-12');
+是错的
+
+
+TCL（事物控制语言）:
+commit,rollback,savepoint(使当前事物回退到指定的保存点，便于取消部分改变)
+
+
+DQL（数据查询语言）:
+select
+
+DCL（数据控制语言）:
+用于执行权限的授予和收回操作，包括：
+grant:授予，用于给用户或者角色授予权限
+revoke：用于收回用户或角色已有的权限
+create user：创建用户
+
+
+
+Oracle数据类型：
+number(6,2)表示6位数，其中2位小数
+char(n):定长字符串，浪费空间，但查询效率高
+varchar：节省空间，查询效率不高，因为格式不统一
+date：默认格式为DD-MON-RR，如11-APR-71，通常，我们会使用to_date('2002-01-01','YYYY-MM-DD')
+将日期转换为字符串
+
+
+创建表：
+create table emp(
+id number(4) ,
+name varchar2(20) not null,
+gender char(1) default 'M',
+birth date
+salary number(6,2),
+comm number(6,2),
+job varchar2(30),
+manager number(4),
+deptno number(2)
+);
+
+
+查看表的结构：
+desc emp
+
+
+
+-------------------
+修改表
+修改表名：
+rename emp to emp_lch
+
+增加列：
+alter table emp_lch add(hiredate date defult sysdate)
+
+删除列：
+alter table emp_lch drop(hiredate)
+
+修改列：
+alter table emp_lch modify(job varchar2(40) default 'cleck'）
+
+
+
+---------------------------
+DML语句：
+插入数据：
+
+使用默认日期格式插入记录
+insert into emp_lch(id,name,job,birth) 
+values(1002,'marcha','analyst','01-SER-03');
+使用自定义日期格式插入记录
+insert into emp_lch(id,name,job,birth)
+values(1003,'donna','manager',to_date('2009-09-01','YYYY-MM-DD’)）;
+
+
+
+
+更新数据：
+update emp_lch set salary=8500 where name = 'rose';
+
+删除记录：
+delete from emp_lch where job is null;
+
+请注意，delete和truncate语句的区别：
+delete可以有条件删除，truncate将表数据全部删除
+delete是DML语句，可以回退，truncate是DDL语句，立即生效，无法回退
+如果删除全部记录，且数据量较大，delete语句效率比truncate语句低。
+
+删除全部记录：
+delete from emp_lch; (DML)
+或者
+truncate table emp_lch; (DDL)
+

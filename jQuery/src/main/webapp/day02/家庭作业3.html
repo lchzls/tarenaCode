@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>家庭作业3秒表计时器</title>
+<style>
+	p{
+		dispaly:block;
+		width: 255px;
+		background-color:pink;
+	}
+</style>
+<script type="text/javascript"src="../JS/jquery-1.11.1.js"></script>
+<script>
+	$(function(){
+		var m=0;
+		var id=setInterval(function(){
+			m+=10;
+			var HH=parseInt(m/1000/60);
+			var MM=parseInt(m/1000%60);
+			var SS=parseInt(m%1000/10);
+			$(":text").val(HH+":"+MM+":"+SS);
+		}, 10);
+	});
+</script>
+</head>
+<body>
+	<p> 逗留时间为：<input type="text"/></p>
+</body>
+</html>

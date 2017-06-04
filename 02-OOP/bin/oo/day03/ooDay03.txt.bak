@@ -1,0 +1,506 @@
+回顾:
+1.方法的签名:方法名+参数列表
+2.方法的重载(overload):
+  1)一个类中，方法名相同，参数列表不同
+  2)编译器编译时自动根据签名绑定调用不同的方法
+3.构造方法:构造器，构建器，构造函数
+  1)给成员变量初始化
+  2)与类同名，没有返回值类型
+  3)new的时候被自动调用
+  4)不写则默认无参，写了则不再默认
+  5)重载
+4.this:指代当前对象，哪个对象调指的就是哪个对象
+       成员变量之前默认都有个this.
+	   this.成员变量名
+	   this.方法名()
+	   this()
+5.引用类型数组:
+    Cell[] cells = new Cell[4]; //创建格子数组对象
+	cells[0] = new Cell(); //创建格子对象
+    int[][] arr = new int[3][];
+    arr[0] = new int[2];
+	int[][] arr = new int[3][4];
+
+
+正课:
+1.内存管理:由JVM来分配管理----了解
+  1)堆:
+    1.1)存储所有new出来的对象(包括成员变量)
+	1.2)成员变量的生命周期:
+	      创建对象时在堆中存在，垃圾回收器回收对象时一并消失
+	1.3)垃圾回收器(GC)，不定时到内存中清理垃圾
+	    没有任何引用指向的对象就是垃圾
+		回收过程是透明的，System.gc()建议快一些回收
+	1.4)内存泄露:不再使用的内存没有被及时的回收
+	    建议:不再使用的对象及时将引用设置为null
+  2)栈:
+    2.1)存储正在执行的方法中的所有局部变量
+	2.2)JVM为每一个正在调用中的方法在栈中
+	    分配一块对应的栈桢，
+	    栈桢中包含方法中的所有局部变量，
+		方法执行完以后，栈桢被清除，局部变量一并消失
+	2.3)局部变量生命周期:
+	      调用方法时存在栈中，方法结束栈桢被清除时消失
+  3)方法区:
+    3.1)用于存储字节码文件(.class)以及方法
+	3.2)方法只有一份，
+	    通过this来区分具体的对象
+2.继承:
+  1)作用:代码复用，避免代码的重复
+  2)通过extends实现继承
+  3)父类:所有子类所共有的属性和行为
+    子类:子类所特有的属性和行为
+  4)子类继承父类后，子类具有:
+      父类的+子类的
+  5)一个父类可以有多个子类
+    一个子类只能有一个父类----单一继承
+  6)继承具有传递性
+  7)java规定:构造子类之前必须先构造父类
+    在子类构造方法中若没有通过super调用父类的构造方法，
+	则默认super()调用父类的无参构造，
+	若子类构造方法中自己调用了，则不再默认提供
+	super调父类构造方法必须位于子类构造方法的第1句
+3.super:指代当前对象的父类对象
+  super用法:
+     super.成员变量名------访问父类的成员变量
+	 super.方法名()--------调用父类的方法
+	 super()---------------调用父类的构造方法
+4.向上造型:
+  1)父类型的引用指向子类的对象
+  2)能点出来什么，看引用的类型
+
+
+练习一:
+  创建oo.day04的包，在包中:
+  定义:
+    类:Cell、Tetromino、T、J、O、TJTest
+
+
+
+
+
+
+
+
+
+
+
+1)继承要符合is a的关系
+2)向上造型的意义何在
+3)为何能访问到cells中的数据
+
+
+
+
+
+
+
+
+
+
+
+
+class Dog{
+  String name;
+  int age;
+  String address;
+}
+
+class Person extends Dog{ //不合理，不能仅仅为了共用代码就继承
+  
+}
+
+
+
+
+
+
+
+
+UpTypeDemo
+
+
+
+
+
+
+
+
+Tetromino这种类型，既能接收T型对象
+                   也能接收J型对象
+				   也能接收O型对象
+				   ......
+
+Tetromino o1 = new T();
+Tetromino o2 = new J();
+Tetromino o3 = new O();
+
+
+
+
+
+
+
+
+
+Tetromino o1 = new T();
+
+
+
+
+
+
+
+
+Person p1 = new Student();
+Person p2 = new Teacher();
+Person p3 = new Doctor();
+
+Animal o1 = new Tiger();
+Animal o2 = new Cat();
+Animal o3 = new Dog();
+
+
+
+
+
+
+
+//动物是动物
+Animal o1 = new Animal();
+//老虎是老虎
+Tiger o2 = new Tiger();
+//老虎是动物
+Animal o3 = new Tiger(); //向上造型
+
+//动物是老虎
+Tiger o4 = new Animal(); //编译错误
+
+
+class Animal{ //动物
+}
+class Tiger extends Animal{ //老虎
+}
+
+
+
+
+
+
+T型参数，只能接收T型对象
+J型参数，只能接收J型对象
+O型参数，只能接收O型对象
+L型参数，只能接收L型对象
+I型参数，只能接收I型对象
+S型参数，只能接收S型对象
+Z型参数，只能接收Z型对象-------方法的重载
+
+
+假设:
+  有一种类型??，既能接收T型对象
+                也能接收J型对象
+				也能接收O型对象
+				也能接收L型对象
+				也能接收I型对象
+				也能接收S型对象
+				也能接收Z型对象
+
+
+
+
+
+
+
+
+
+
+
+
+
+T t = new T(2,5); //25,26,27,36
+
+i=2  j=6
+
+
+
+
+				/*
+				 * 25,26,27,36
+				 * i=2 j=7
+				 * k=0
+				 *   if(2==2 && 7==5)----false---打-
+				 * k=1
+				 *   if(2==2 && 7==6)----false---打-
+				 *   
+				 */
+				
+
+何时打*:
+  只要行列匹配，则打*
+何时打-:
+  与4个格都没配上，则打-
+
+
+并非一次判断就得最终结果---------开关
+
+i=2 j=5
+k=0 配上-----打*了
+  k=1/2/3
+
+
+高质量的代码:
+   复用性、扩展性、维护性、
+   可移植性、健壮性......
+
+
+
+
+
+
+4个人------搭一个框架
+
+清华思路-------卫生项目
+
+福州夜间施工项目----30万
+
+
+
+
+
+
+产品
+项目
+
+OA---------金和软件---------产品
+
+.net做的-----完全没有考虑扩展性
+java做的
+
+
+
+
+
+//打墙+打T型
+public static void printWall(T tt){
+	for(int i=0;i<20;i++){ //行
+		for(int j=0;j<10;j++){ //列
+			if(i==tt.cells[0].row && j==tt.cells[0].col
+			   ||
+			   i==tt.cells[1].row && j==tt.cells[1].col
+			   ||
+			   i==tt.cells[2].row && j==tt.cells[2].col
+			   ||
+			   i==tt.cells[3].row && j==tt.cells[3].col){
+				System.out.print("* ");
+			}else{
+				System.out.print("- ");
+			}
+		}
+		System.out.println();
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Coo o = new Coo();
+o.c = 1;
+o.b = 2;
+o.a = 3;
+
+class Aoo{
+  int a;
+}
+class Boo extends Aoo{
+  int b;
+}
+class Coo extends Boo{
+  int c;
+}
+
+
+Tetromino
+
+
+
+
+
+
+Student zs = new Student();
+zs.className/study();
+zs.name/age/address/eat()/sleep();
+
+class Person{ //父类
+  String name;
+  int age;
+  String address;
+  void eat(){}
+  void sleep(){}
+}
+class Student extends Person{ //子类
+  String className;
+  void study(){}
+}
+class Teacher extends Person{
+  double salary;
+  void teach(){}
+}
+class Doctor extends Person{
+  String level;
+  void cut(){}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+代码中的继承:
+  代码不需要自己写，自己也能用
+
+生活中的继承:
+1.继承财产:
+    钱不需要自己挣，自己也能花
+2.继承皇位:
+    江山不需要自己打，自己也能坐
+3.继承工作:
+    工作不需要自己找，自己也能干
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+成员变量有几份:
+  有几个对象就有几份
+方法有几份:
+  只有一份
+
+Cell c = new Cell();
+c.row = 2;
+c.drop();
+
+Cell cc = new Cell();
+cc.row = 6;
+cc.drop();
+
+方法中this
+
+
+class Cell{
+  int row;
+  int col;
+  void drop(){
+    row++;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+成员变量:有默认值
+局部变量:没有默认值
+
+Aoo o = new Aoo();
+class Aoo{
+  int a;
+  void show(int b){
+    int c;
+	System.out.println(a);
+	System.out.println(c); //编译错误
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+内存泄露:
+
+
+
+自动垃圾回收
+  垃圾回收器(GC)
+
+
+System.gc();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+java程序，内存不足
+中关村买了一根2G的内存条，装电脑上了
+还是内存不足
+如何解决?
+  给JVM加内存
+  
+
+
+
+
+
+
+
+
+
+
+
+填空题，选择题，判断题，
+代码分析题，简答题，问答题，
+编码题
+
+

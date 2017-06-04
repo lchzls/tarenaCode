@@ -1,0 +1,39 @@
+1.要求掌握注解方式事务管理应用
+2.掌握AOP简单应用。
+
+AOP面向切面编程，注意，它是一段独立的逻辑代码，一般不发生值传递。像写入异常信息，是通过参数进行值传递。但是一般如果涉及到值传递，一般都是不建议用AOP的。这样就不能解耦了。
+
+=======================MyBatis应用==========================
+1.MyBatis动态SQL
+可以根据传入的参数不同，拼不同的sql语句。
+MyBatis提供了一套标签，用于在XML中动态拼凑SQL语句。
+select * from emp 
+<if test="xxx">...</if>
+
+<choose>
+ <when test="xxx">...</when>
+ <when test="xxx">...</when>
+ <otherwise>...</otherwise>
+</choose>
+
+<foreach></foreach>
+
+<where>
+
+<set>
+
+a.组合查询功能
+笔记：标题、状态、开始日期、结束日期
+根据上述条件，用户可以随意输入信息按信息搜索。
+
+
+/note/hightSearch.do
+-->HightSearchController
+-->NoteService
+-->NoteDao-->cn_note
+-->返回NoteResult结构的json数据
+
+
+
+
+
